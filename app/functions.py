@@ -20,11 +20,27 @@ import uuid # to create a unique id for the temporary file for PyPDFLoader
 import pandas as pd # to convert the pdf to a dataframe and then to a table
 import re # to clean the text  
 
-# used to clean up the file name  (as we need it later)
+# used to clean up the file name  (as we need it for the vector store)
 def clean_filename(filename):
-    # Regular expression to find "(number)" pattern in filename
-    new_filename = re.sub(r'\s\(\d+\)', '', filename)
-    return new_filename # return the cleaned filename
+    # NOTE:
+    # the following is done because the filename is used as the collection name in the vector store
+    # and it must follow the rules of a string in a vector store
+    
+    # Remove spaces and replace with underscores
+    filename = filename.replace(" ", "_")
+    # Remove any characters that are not alphanumeric, underscore, or hyphen
+    filename = re.sub(r'[^a-zA-Z0-9_-]', '', filename)
+    # Remove consecutive periods (if any)
+    filename = re.sub(r'\.{2,}', '.', filename)
+    # Ensure the filename does not start or end with a period
+    filename = filename.strip('.')
+    # Ensure filename length is between 3 and 63 characters 
+    if len(filename) < 3:
+        filename = 'default_name'
+    elif len(filename) > 63:
+        filename = filename[:63]
+    # Return the cleaned filename
+    return filename
 
 # loading the text from the pdf file
 def get_pdf_text(uploaded_file): 
@@ -113,13 +129,6 @@ def create_vectorstore_from_texts(documents, api_key, file_name):
     # return the vector store now filled with the pdf text
     return vectorstore
 
-# main function to load the vector store
-# this function is called after we create the vector store in the streamlit app
-def load_vectorstore(file_name, api_key, vectorstore_path="db"):
-    embedding_function = get_embedding_function(api_key)
-    return Chroma(persist_directory=vectorstore_path, 
-                  embedding_function=embedding_function, 
-                  collection_name=clean_filename(file_name))
 
 # Prompt template (little different from the original in notebook)
 PROMPT_TEMPLATE = """

@@ -7,10 +7,13 @@ the outline for this app is in this file, it uses the calculations from the func
 import streamlit as st  # streamlit
 from functions import * # import all functions from functions.py
 import base64 # for encoding and decoding
+api_key = False
+uploaded_file_state = False
 
 # Initialize the API key in session state if it doesn't exist
 if 'api_key' not in st.session_state:
     st.session_state.api_key = ''
+    api_key = True
 
 def display_pdf(uploaded_file): # after file is uploaded display it
     # Read file as bytes:
@@ -53,6 +56,7 @@ if uploaded_file is not None:
                                                                   api_key=st.session_state.api_key,
                                                                   file_name=uploaded_file.name)
     st.write("Input Processed") # finish statement
+    uploaded_file_state = True
 
 # Generate answer using the vector store
 with col1: # left column
