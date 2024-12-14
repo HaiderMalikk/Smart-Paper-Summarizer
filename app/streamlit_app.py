@@ -7,13 +7,11 @@ the outline for this app is in this file, it uses the calculations from the func
 import streamlit as st  # streamlit
 from functions import * # import all functions from functions.py
 import base64 # for encoding and decoding
-api_key = False
 uploaded_file_state = False
 
 # Initialize the API key in session state if it doesn't exist
 if 'api_key' not in st.session_state:
     st.session_state.api_key = ''
-    api_key = True
 
 def display_pdf(uploaded_file): # after file is uploaded display it
     # Read file as bytes:
@@ -27,7 +25,7 @@ def display_pdf(uploaded_file): # after file is uploaded display it
 
 # Main app page
 def load_streamlit_page(): 
-    st.set_page_config(layout="wide", page_title="LLM Tool")
+    st.set_page_config(layout="wide", page_title="Smart Paper Summarizer")
     # Design page layout with 2 columns: File uploader on the left, and other interactions on the right.
     col1, col2 = st.columns([0.5, 0.5], gap="large")
     with col1: # left column
@@ -61,6 +59,11 @@ if uploaded_file is not None:
 # Generate answer using the vector store
 with col1: # left column
     if st.button("Generate table"): # if the button is clicked
+        if uploaded_file_state is False: # if we haven't uploaded a file
+            st.write("Please upload a file first")
+        if st.session_state.api_key is '': # if the api key is empty
+            st.write("Please enter your OpenAI API key")
+            
         with st.spinner("Generating answer"): # display a spinner that will wait until the answer is generated
             # answer if now generated and ready
             
@@ -73,4 +76,6 @@ with col1: # left column
             placeholder = st.empty() # create an empty placeholder to display the answer
             placeholder = st.write(answer) # display the answer in the placeholder
             
-# * done
+        
+            
+# done

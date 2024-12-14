@@ -204,3 +204,5 @@ def query_document(vectorstore, query, api_key): # pass in the vector store and 
   
     # return the structured response dataframe trasposed i.e rows become columns, for readability
     return structured_response_df.T
+
+# Done
