@@ -23,4 +23,4 @@ Text embeddings are numerical representations (vectors) of text that capture the
 Text embeddings allow you to find meaningfully similar chunks of text rather than just relying on keyword matching. This makes it easier to retrieve relevant content from the PDF based on the user's query. By retrieving the most relevant chunks using embeddings, you ensure that the LLM (GPT-4 mini) works with contextually appropriate information, leading to more accurate and concise summaries.
 
 look at this ex, here the words 'man' and 'woman' are closer in space than 'man' and 'queen' this means that if the question included 'man' and the pdf had 'woman' it would be a good match. for that word and hence could be added to the context of the question.
-<img src="./assets/embeddingex.png" alt="Home" width="500" height="auto" />
+<img src="./assets/embeddingex.png" alt="Home" width="400" height="auto" />
