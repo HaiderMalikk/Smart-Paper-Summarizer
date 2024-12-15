@@ -168,7 +168,7 @@ def format_docs(docs):
 # RunnablePassthrough() passes through the input question unchanged.
 def query_document(vectorstore, query, api_key): # pass in the vector store and the question to be asked along with the api key
     # define llm (keep temp 0.3-0.5 for best results, keep max tokens low for best results)
-    llm = ChatOpenAI(model="gpt-4o-mini", api_key=api_key, temperature=0.3)
+    llm = ChatOpenAI(model="gpt-4o-mini", api_key=api_key, temperature=0.3, max_tokens=2048)
     # define retriever (gets text chunks from vector store based on similarity)
     retriever=vectorstore.as_retriever(search_type="similarity")
     # define prompt template with context and question
